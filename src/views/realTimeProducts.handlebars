@@ -1,0 +1,81 @@
+<div class='container rounded bg-info-subtle'>
+    <h2 class='text-center text-muted text-uppercase py-2'>En Tiempo Real:<br>Lista de productos</h2>
+
+    <hr class='text-white' />
+
+    <div class='card mb-5 col-md-6 offset-md-3'>
+        <div class='card-header text-center'>
+            <h5 class='fw-semibold text-uppercase'>Formulario para crear producto</h5>
+        </div>
+        <div class='card-body'>
+            <form id='form'>
+                <div class="mb-2">
+                    <label for="title" class="form-label fw-semibold">Producto:</label>
+                    <input type="text" class="form-control" name="title" id="title" required/>
+                </div>
+                <div class="mb-2">
+                    <label for="description" class="form-label fw-semibold">Descripción:</label>
+                    <input type="text" class="form-control" name="description" id="description" required/>
+                </div>
+                <div class="mb-2">
+                    <label for="price" class="form-label fw-semibold">Precio:</label>
+                    <input type="number" class="form-control" name="price" id="price" step="50.00" required/>
+                </div>
+                <div class="mb-2">
+                    <label for="code" class="form-label fw-semibold">Código:</label>
+                    <input type="text" class="form-control" name="code" id="code" required/>
+                </div>
+                <div class="mb-2">
+                    <label for="category" class="form-label fw-semibold">Categoría:</label>
+                    <select class="form-select" aria-label="Default select example" name="category" id="category" required>
+                        <option selected>Elige una opción</option>
+                        <option value="Entradas">Entradas</option>
+                        <option value="Principales">Principales</option>
+                        <option value="Extras">Extras</option>
+                    </select>
+                </div>
+                <div class="mb-2">
+                    <label for="stock" class="form-label fw-semibold">Stock:</label>
+                    <input type="number" class="form-control" name="stock" id="stock" required/>
+                </div>
+                <button type="submit" class="btn btn-outline-success form-control fw-bold" id="addProduct">Crear Producto</button>
+            </form>
+        </div>
+    </div>
+
+    <hr class='text-white' />
+
+    <table class="table table-bordered table-striped table-hover text-center mt-5" id="productsTable">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Código</th>
+                <th>Categoría</th>
+                <th>Stock</th>
+                <th>Control</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            {{#each allProducts}}
+            <tr>
+                <td class="text-start">{{this.title}}</td>
+                <td class="text-start">{{this.description}}</td>
+                <td>{{this.price}}</td>
+                <td>{{this.code}}</td>
+                <td>{{this.category}}</td>
+                <td>{{this.stock}}</td>
+                <td>
+                    <button class="btn btn-danger" onclick="deleteProduct(`{{this._id}}`)" id="btnDelete">Eliminar</button>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<script src='/socket.io/socket.io.js'></script>
+<!-- <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script> -->
+<!--<script src='../public/js/index.js'></script>-->
+<script src='/js/index.js'></script>

@@ -1,0 +1,123 @@
+[
+	{
+		"id": 1,
+		"title": "tamales",
+		"description": "Masa de maiz rellena con pollo, aceitunas y huevo",
+		"price": 1000,
+		"thumbnail": "https://elsabornorteno.000webhostapp.com/img/entradas/tamales.png",
+		"code": "001",
+		"category": "Entradas",
+		"stock": 30,
+		"status": true
+	},
+	{
+		"id": 2,
+		"title": "ceviche clasico",
+		"description": "Cubos de pescado marinados con limón acompañado con rodajas de camote y choclo",
+		"price": 5200,
+		"thumbnail": "https://elsabornorteno.000webhostapp.com/img/entradas/ceviche.png",
+		"code": "002",
+		"category": "Entradas",
+		"stock": 5,
+		"status": true
+	},
+	{
+		"id": 3,
+		"title": "ceviche mixto",
+		"description": "Cubos de pescado marinados con limón acompañado con camarones, almejas, mejillones, calamar, berberechos, rodajas de camote y choclo",
+		"price": 7000,
+		"thumbnail": "https://elsabornorteno.000webhostapp.com/img/entradas/ceviche-mixto.png",
+		"code": "003",
+		"category": "Entradas",
+		"stock": 3,
+		"status": true
+	},
+	{
+		"id": 4,
+		"title": "pollo dorado",
+		"description": "Pata muslo dorada con papas fritas y ensalada",
+		"price": 2500,
+		"thumbnail": "https://elsabornorteno.000webhostapp.com/img/principales/pollo%20dorado.png",
+		"code": "004",
+		"category": "Principales",
+		"stock": 10,
+		"status": true
+	},
+	{
+		"id": 5,
+		"title": "arroz chaufa",
+        "description": "Arroz con pollo, carne, huevo, salchicha, cebollita",
+		"price": 4100,
+		"thumbnail": "https://elsabornorteno.000webhostapp.com/img/principales/arroz-chaufa.png",
+		"code": "005",
+		"category": "Principales",
+		"stock": 15,
+		"status": true	
+	},
+	{
+		"id": 6,
+		"title": "arroz chaufa veggie",
+        "description": "Arroz con variedad de vegetales, ciboulette, huevo salteado al wok con salsa de soja",
+		"price": 3500,
+		"thumbnail": "https://elsabornorteno.000webhostapp.com/img/principales/chaufa-vegetariano.png",
+		"code": "006",
+		"category": "Principales",
+		"stock": 15,
+		"status": true	
+	},
+	{
+		"id": 7,
+        "title": "lomo salteado",
+        "description": "Carne salteada con papas fritas, cebolla, tomate y porción de arroz",
+		"price": 4500,
+		"thumbnail": "https://elsabornorteno.000webhostapp.com/img/principales/lomo-saltado.png",
+		"code": "007",
+		"category": "Principales",
+		"stock": 10,
+		"status": true
+	},
+	{
+		"id": 8,
+        "title": "rabas",
+        "description": "Aros de calamar fritos acompañados con papas fritas y ensalada",
+		"price": 7200,
+		"thumbnail": "https://elsabornorteno.000webhostapp.com/img/principales/rabas.png",
+		"code": "008",
+		"category": "Principales",
+		"stock": 6,
+		"status": true
+	},
+	{
+		"id": 9,
+        "title": "jalea de mariscos",
+        "description": "Trozos de pescado, aros de calamar, mix de mariscos fritos acompañado con rodajas de papas y salsa criolla",
+		"price": 8900,
+		"thumbnail": "https://elsabornorteno.000webhostapp.com/img/principales/jalea-da-mariscos.png",
+		"code": "009",
+		"category": "Principales",
+		"stock": 4,
+		"status": true
+	},
+	{
+		"id": 10,
+        "title": "arroz",
+        "description": "Porción de arroz blanco",
+		"price": 900,
+		"thumbnail": "https://elsabornorteno.000webhostapp.com/img/extras/arroz.png",
+		"code": "010",
+		"category": "Extras",
+		"stock": 8,
+		"status": true
+	},
+	{
+		"id": 11,
+        "title": "ensalada mixta",
+        "description": "Lechuga, tomate y zanahoria",
+		"price": 900,
+		"thumbnail": "https://elsabornorteno.000webhostapp.com/img/extras/ensalda-mixta.png",
+		"code": "011",
+		"category": "Extras",
+		"stock": 5,
+		"status": true
+	}
+]
