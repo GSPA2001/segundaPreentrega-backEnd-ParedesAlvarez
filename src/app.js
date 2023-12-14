@@ -31,7 +31,7 @@ app.use(express.static(__dirname + '/public'))
 app.get('/', (req,res) => res.render('index', { name: 'Tutor' }))
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
-// app.use('/products', viewsRouter)
+app.use('/products', viewsRouter)
 app.use('/home', viewsRouter)
 
 // Configuración de Mongoose

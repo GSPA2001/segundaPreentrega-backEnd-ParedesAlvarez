@@ -29,6 +29,37 @@ router.get('/realTimeProducts', async (req, res) => {
     }
 })
 
+// Nueva ruta para mostrar todos los productos con paginación
+/*router.get('/products', async (req, res) => {
+    try {
+      // Obtener todos los productos desde la base de datos (usando mongoose)
+      const allProducts = await productModel.find().lean().exec();
+  
+      // Renderizar la vista 'products.handlebars' con la lista de productos
+      res.render('products', { allProducts });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ status: 'error', error: err.message });
+    }
+  })*/
+router.get('/products', async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 5; // Puedes ajustar el límite de productos por página según tus necesidades
+
+    try {
+        const allProducts = await productModel.find()
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .lean()
+            .exec();
+
+        res.render('products', { allProducts, currentPage: page });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ status: 'error', error: err.message });
+    }
+});
+
 // Ruta para la página de carts en tiempo real
 router.get('/carts/:cid', async (req, res) => {
     try {

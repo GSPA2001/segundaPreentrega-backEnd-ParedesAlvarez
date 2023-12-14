@@ -1,0 +1,31 @@
+<div class='container mt-4 rounded bg-danger p-2 text-white bg-opacity-75'>
+    <h2 class='text-center mb-4'>Lista de Productos (Página {{currentPage}})</h2>
+    <table class='table table-bordered table-striped table-hover text-center'>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Código</th>
+                <th>Categoría</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each allProducts}}
+                <tr>
+                    <td class='text-start'>{{this.title}}</td>
+                    <td class='text-start'>{{this.description}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{this.code}}</td>
+                    <td>{{this.category}}</td>
+                    <td>{{this.stock}}</td>
+                    <td>
+                        <a href='#' class='btn btn-success btn-sm addToCart' data-product-id="{{this._id}}">Agregar al Carrito</a>
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

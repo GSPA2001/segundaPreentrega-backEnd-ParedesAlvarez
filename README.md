@@ -23,8 +23,8 @@ Instalación:
 * Al ingresar a http://localhost:8080/api/products/6562154e1559fe5e7c2adf4a, se muestra solo el producto con ID 2.
 * Al probar con un ID inexistente, por ejemplo, http://localhost:8080/api/products/999, se devuelve un mensaje indicando que el producto no se encontró.
 
-* Al acceder a http://localhost:8080/api/carts, se obtienen todos los carritos.✅
-* Al ingresar a http://localhost:8080/api/carts/65622128f61cdd3d80b8237d, se muestra solo el carrito con ID 1. ❌
+* Al acceder a http://localhost:8080/api/carts, se obtienen todos los carritos.
+* Al ingresar a http://localhost:8080/api/carts/656221e4f61cdd3d80b8237f, se muestra solo el carrito con ID 1. 
 
 ## Endpoints de handlebars
 * Para el funcionamiento de index.handlebars http://localhost:8080/
@@ -47,7 +47,7 @@ Una vez que el servidor esté en ejecución, abre Postman:
 
 #### Para Handlebars:
 - **Página principal:** Utiliza el método GET a la URL http://localhost:8080/
-- **Página home:** Utiliza el método GET a la URL http://localhost:8080/home/
+- **Página products:** Utiliza el método GET a la URL http://localhost:8080/products/
 - **Página realTimeProducts:** Utiliza el método GET a la URL http://localhost:8080/home/realtimeproducts
 - **Página de chat:** Utiliza el método GET a la URL http://localhost:8080/home/chat
 
