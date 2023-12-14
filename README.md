@@ -43,7 +43,7 @@ Una vez que el servidor esté en ejecución, abre Postman:
 
 #### Para Carritos:
 - **Crear un nuevo carrito:** Utiliza el método POST a la URL http://localhost:8080/api/carts
-- **Obtener un carrito por ID:** Utiliza el método GET a la URL http://localhost:8080/api/carts/65622128f61cdd3d80b8237d, donde {id} es el carrito 1.❌
+- **Obtener un carrito por ID:** Utiliza el método GET a la URL http://localhost:8080/api/carts/65622562f61cdd3d80b82385, donde {id} es el carrito 1.
 
 #### Para Handlebars:
 - **Página principal:** Utiliza el método GET a la URL http://localhost:8080/
