@@ -56,13 +56,17 @@ mongoose.connect(mongoose_URL, {dbName: mongoDBName})
         
         let messages = (await messageModel.find()) || [];
         
-        socket.broadcast.emit('alerta')
-        socket.emit('logs', messages)
-        socket.on('message', data => {
+        socket.broadcast.emit('alerta');
+        socket.emit('logs', messages);
+        /*socket.on('message', data => {
             messages.push(data)
             messageModel.create(messages)
             io.emit('logs', messages)
-        })
+        })*/
+        socket.on('message', async (data) => {
+            const newMessage = await messageModel.create(data);
+            io.emit('logs', [newMessage]);  // Emitir solo el nuevo mensaje
+        });
     })
 }) 
 .catch(e => console.error('Error to connect 🚨🚨🚨', e))

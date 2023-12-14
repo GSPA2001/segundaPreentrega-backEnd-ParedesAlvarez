@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
 
-        socket.on('logs', (data) => {
+        /*socket.on('logs', (data) => {
             const messagesHTML = data
                 .reverse()
                 .map((message) => {
@@ -47,7 +47,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 .join('')
 
             messagesLogs.innerHTML = messagesHTML
-        })
+        })*/
+        socket.on('logs', (data) => {
+            messagesLogs.innerHTML = ''; // Limpiar el contenido actual
+        
+            const messagesHTML = data
+                .reverse()
+                .map((message) => {
+                    return `<div class='bg-secondary p-2 my-2 rounded-2'>
+                                <p><i>${message.user}</i>: ${message.message}</p>
+                            </div>`;
+                })
+                .join('');
+        
+            messagesLogs.innerHTML = messagesHTML; // Agregar los nuevos mensajes
+        });
 
         socket.on('alerta', () => {
             Toastify({
