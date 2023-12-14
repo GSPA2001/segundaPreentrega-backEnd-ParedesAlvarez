@@ -5,36 +5,35 @@ const router = Router();
 
 router.get('/', async (req, res) => {
   try {
-    // Obtener parámetros de consulta
-    const limit = parseInt(req.query.limit) || 10;  // Si no se proporciona, el valor predeterminado es 10
-    const page = parseInt(req.query.page) || 1;    // Si no se proporciona, el valor predeterminado es 1
+    const { page = 1, limit = 10, sort } = req.query;
+
+    // Validar que sort esté en el formato correcto
+    if (sort && (!sort.startsWith('price:') || !['1', '-1'].includes(sort.split(':')[1]))) {
+      return res.status(400).json({ status: 'error', error: 'Invalid sort parameter' });
+    }
+
+    console.log('Sort parameter:', sort);
+    const sortOrder = sort ? parseInt(sort.split(':')[1]) : 1;
+
+    // Aplicar paginación y ordenamiento
     const skip = (page - 1) * limit;
-    const sort = req.query.sort;
-
-    // Validar que limit y page sean números positivos
-    if (isNaN(limit) || limit <= 0 || isNaN(page) || page <= 0) {
-      return res.status(400).json({ status: 'error', error: 'Invalid limit or page value' });
-    }
-
-    const productsQuery = productModel.find().lean().skip(skip).limit(limit);
-
-    // Agregar ordenamiento si se proporciona
-    if (sort) {
-      productsQuery.sort(sort);
-    }
+    const productsQuery = productModel
+      .find({ price: { $gt: 0 } })
+      .lean()
+      .sort({ price: sortOrder })
+      .skip(skip)
+      .limit(limit);
 
     const products = await productsQuery;
 
-    if (products.length === 0) {
-      return res.status(404).json({ status: 'error', error: 'No products found' });
-    }
+    // Obtener el total de productos sin límite ni paginación
+    const totalProducts = await productModel.countDocuments({ price: { $gt: 0 } });
 
-    const totalProducts = await productModel.countDocuments();
+    // Construir la respuesta estructurada
     const totalPages = Math.ceil(totalProducts / limit);
     const hasPrevPage = page > 1;
     const hasNextPage = page < totalPages;
 
-    // Construir la respuesta estructurada
     const response = {
       status: 'success',
       products: products,
