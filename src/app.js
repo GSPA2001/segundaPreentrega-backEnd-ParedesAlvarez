@@ -29,10 +29,10 @@ app.use(express.static(__dirname + '/public'))
 
 // Configuración de rutas
 app.get('/', (req,res) => res.render('index', { name: 'Tutor' }))
+app.use('/home', viewsRouter)
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
-app.use('/products', viewsRouter)
-app.use('/home', viewsRouter)
+app.use('/products', productsRouter)
 
 // Configuración de Mongoose
 mongoose.set('strictQuery', false)
