@@ -54,19 +54,57 @@ mongoose.connect(mongoose_URL, {dbName: mongoDBName})
             io.emit('updatedProducts', data)
         })
         
-        let messages = (await messageModel.find()) || [];
-        
-        socket.broadcast.emit('alerta');
-        socket.emit('logs', messages);
-        /*socket.on('message', data => {
-            messages.push(data)
-            messageModel.create(messages)
-            io.emit('logs', messages)
-        })*/
-        socket.on('message', async (data) => {
-            const newMessage = await messageModel.create(data);
-            io.emit('logs', [newMessage]);  // Emitir solo el nuevo mensaje
-        });
+        async function getChats() { // Load the chats form DB
+            try {
+              let result = await messagesModel.find();
+              return result
+            } catch (error) {
+              console.log('Error loading the chats: ', error);
+            }
+          }
+          
+          async function saveChats({sender, message}) { // Save chats to DB
+            try {
+              let result = await messagesModel.create({user:sender, message: message});
+              return result
+            } catch (error) {
+              console.log('Error saving the chats: ', error);
+            }
+          
+          }
+          
+          // Init
+          
+          let users = [];
+          
+          io.on("connection", (socket) => {
+            console.log(`New socket connected with ID: ${socket.id}`)
+            socket.on("login", async (name) => {
+              console.log("The user with the following ID has logged in: ", name);
+              socket.broadcast.emit("newUser", name); // We broadcast to everyone (except the sender), that a user has logged in
+              users.push({ name, id: socket.id });
+              let messages = await getChats(); // Get the messages from MongoDB
+              console.log('Messages in the DB: ', messages)
+              socket.emit("getMessages", messages); // Loads all the messages stored in memory to the new user
+            });
+          
+            socket.on("message", async (messages) => {
+              console.log(
+                `The user ${messages.sender} sent the following message: ${messages.message}`
+              );
+              io.emit("newMessage", messages); // We send the message to everyone connected to the server
+              await saveChats(messages); // Saves the message to the DB
+            });
+          
+            socket.on("disconnect", () => {
+              // If a user disconnects, we let everyone know
+              let disconnectedUser = users.find((user) => user.id === socket.id);
+              if (disconnectedUser) {
+                io.emit("userDisconnect", disconnectedUser.name);
+              }
+            });
+          });
+          
     })
 }) 
 .catch(e => console.error('Error to connect 🚨🚨🚨', e))

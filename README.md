@@ -30,7 +30,7 @@ Instalación:
 * Para el funcionamiento de index.handlebars http://localhost:8080/
 * Para el funcionamiento de home.handlebars http://localhost:8080/home
 * Para el funcionamiento de realTimeProducts.handlebars http://localhost:8080/home/realtimeproducts 
-* Para el funcionamiento de chat.handlebars http://localhost:8080/home/chat 
+* Para el funcionamiento de chat.handlebars http://localhost:8080/home/chat (todavia en reformas de mejorar estilo se llegan a ver los mensajes cuando se prueba dos)
 
 ## Para probar el código puede usar Postman
 ### Enviar Solicitudes a las Rutas Específicas

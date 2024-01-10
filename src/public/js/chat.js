@@ -1,86 +1,90 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const chatBox = document.getElementById('chatBox')
-    const userDisplay = document.getElementById('user')
-    const messagesLogs = document.getElementById('messagesLogs')
+const socket = io();
 
-    const setUsername = async () => {
-        const { value: username } = await Swal.fire({
-            title: 'Autenticación',
-            input: 'text',
-            text: 'Establecer nombre de usuario para el Chat',
-            inputValidator: (value) => {
-                return (
-                !value.trim() && 'Por favor, escriba un nombre de usuario válido'
-                )
-            },
-            allowOutsideClick: false,
-        })
+let inputMessage = document.getElementById("message");
+let messageDiv = document.getElementById("messages");
+let sendButton = document.getElementById("sendButton");
 
-        userDisplay.innerHTML = `<b>${username}: </b>`
+socket.on("connect", () => {
+  console.log("Cliente conectado");
+});
 
-        return username
+Swal.fire({
+  title: "Login to chat",
+  input: "text",
+  text: "Please enter your nickname",
+  inputValidator: (value) => {
+    return !value && "Please enter a value!";
+  },
+  customClass: {
+    confirmButton:
+      "ml-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none",
+  },
+  buttonsStyling: false,
+  allowOutsideClick: false,
+}).then((res) => {
+  socket.emit("login", res.value); // We emit the nickname the user entered back to the server
+
+  socket.on("getMessages", (messagesArray) => {
+    // Receives all the messages in memory to show to the new user
+    messagesArray.forEach((element) => {
+      let paragraph = document.createElement("p");
+      paragraph.innerHTML = `<p>-<strong>${element.user}<strong>: ${element.message} </p>`;
+      let hr = document.createElement("hr");
+      messageDiv.append(paragraph, hr);
+      messageDiv.scrollTop = messageDiv.scrollHeight;
+    });
+  });
+  inputMessage.focus();
+  document.title = res.value; // Set the title of the website to the username
+
+  inputMessage.addEventListener("keyup", (e) => {
+    console.log(e.code);
+    if (e.code === "Enter" && e.target.value.trim().length > 0) { // If the user presses enter AND the message input is not empty (the trim function removes whitespaces )
+      let message = e.target.value;
+      socket.emit("message", { sender: res.value, message: message }); // We send the message to the server
+      e.target.value = "";
     }
+  });
 
-    const initSocket = (username) => {
-        const socket = io()
-
-        chatBox.addEventListener('keyup', (event) => {
-            if (event.key === 'Enter' && chatBox.value.trim().length > 0) {
-                const newMessage = {
-                    user: username,
-                    message: chatBox.value,
-                }
-                socket.emit('message', newMessage)
-
-                chatBox.value = ''
-            }
-        })
-
-        /*socket.on('logs', (data) => {
-            const messagesHTML = data
-                .reverse()
-                .map((message) => {
-                    return `<div class='bg-secondary p-2 my-2 rounded-2'>
-                                <p><i>${message.user}</i>: ${message.message}</p>
-                            </div>`
-                })
-                .join('')
-
-            messagesLogs.innerHTML = messagesHTML
-        })*/
-        socket.on('logs', (data) => {
-            messagesLogs.innerHTML = ''; // Limpiar el contenido actual
-        
-            const messagesHTML = data
-                .reverse()
-                .map((message) => {
-                    return `<div class='bg-secondary p-2 my-2 rounded-2'>
-                                <p><i>${message.user}</i>: ${message.message}</p>
-                            </div>`;
-                })
-                .join('');
-        
-            messagesLogs.innerHTML = messagesHTML; // Agregar los nuevos mensajes
-        });
-
-        socket.on('alerta', () => {
-            Toastify({
-                text: 'Un nuevo cliente conectado',
-                duration: 1500,
-                newWindow: true,
-                close: true,
-                gravity: 'top',
-                position: 'right',
-                stopOnFocus: true,
-                style: {
-                background: "#b1ffa4d1",
-                background: "-webkit-linear-gradient(to right, #28b487, #7dd56f)",
-                background: "linear-gradient(to right, #28b487, #7dd56f)",
-                },
-                onClick: function () {},
-            }).showToast()
-        })
+  sendButton.addEventListener("click", (e) => {
+    let message = inputMessage.value.trim(); // Trim to remove whitespace
+    if (message.length > 0) { // Check if the message is not empty
+      socket.emit("message", { sender: res.value, message: message }); // Send the message
+      inputMessage.value = ""; // Clear the input field
     }
+  });
 
-    setUsername().then((username) => initSocket(username))
-})
+  socket.on("newMessage", (messageObj) => {
+    let paragraph = document.createElement("p");
+    paragraph.innerHTML = `<p>-<strong>${messageObj.sender}<strong>: ${messageObj.message} </p>`;
+    let hr = document.createElement("hr");
+    messageDiv.append(paragraph, hr);
+    messageDiv.scrollTop = messageDiv.scrollHeight;
+  });
+
+  socket.on("newUser", (userName) => { // Alert users that a new person has logged in
+    Swal.fire({
+      title: "A new user has entered the chat",
+      text: userName,
+      toast: true,
+      customClass: { // To change sweetalert default button styling
+        confirmButton:
+          "ml-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-green-600 focus:outline-none",
+      },
+      buttonsStyling: false,
+    });
+  });
+
+  socket.on("userDisconnect", (userName) => { // If a user disconnects, we let everyone know
+    Swal.fire({
+      title: "A user has disconnected",
+      text: userName,
+      toast: true,
+      customClass: { // To change sweetalert default button styling
+        confirmButton:
+          "ml-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-red-600 focus:outline-none",
+      },
+      buttonsStyling: false,
+    });
+  });
+});
