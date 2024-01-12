@@ -39,7 +39,7 @@ mongoose.set('strictQuery', false)
 
 // Conexión a MongoDB y inicio servidor
 mongoose.connect(mongoose_URL, {dbName: mongoDBName})
-.then(() => {
+.then(async () => {
     console.log('MongoDB connected 🔌')
     const httpServer = app.listen(PORT, () => console.log(`Listening ...✅`))
 
@@ -53,30 +53,33 @@ mongoose.connect(mongoose_URL, {dbName: mongoDBName})
         socket.on('productList', data => {
             io.emit('updatedProducts', data)
         })
-        
+
         async function getChats() { // Load the chats form DB
             try {
-              let result = await messagesModel.find();
+              let result = await messageModel.find();
               return result
             } catch (error) {
               console.log('Error loading the chats: ', error);
             }
           }
-          
-          async function saveChats({sender, message}) { // Save chats to DB
+
+          async function saveChats(messages) {
             try {
-              let result = await messagesModel.create({user:sender, message: message});
-              return result
+              console.log("Saving messages: ", messages);
+              if (!messages.user) {
+                console.log("User field is missing or undefined");
+                return;
+              }
+              let result = await messageModel.create(messages);
+              return result;
             } catch (error) {
-              console.log('Error saving the chats: ', error);
+              console.log("Error saving the chats: ", error);
             }
-          
           }
-          
+
           // Init
-          
           let users = [];
-          
+
           io.on("connection", (socket) => {
             console.log(`New socket connected with ID: ${socket.id}`)
             socket.on("login", async (name) => {
@@ -87,15 +90,16 @@ mongoose.connect(mongoose_URL, {dbName: mongoDBName})
               console.log('Messages in the DB: ', messages)
               socket.emit("getMessages", messages); // Loads all the messages stored in memory to the new user
             });
-          
+
             socket.on("message", async (messages) => {
               console.log(
                 `The user ${messages.sender} sent the following message: ${messages.message}`
               );
+              messages.timestamp = new Date();
               io.emit("newMessage", messages); // We send the message to everyone connected to the server
               await saveChats(messages); // Saves the message to the DB
             });
-          
+
             socket.on("disconnect", () => {
               // If a user disconnects, we let everyone know
               let disconnectedUser = users.find((user) => user.id === socket.id);
@@ -104,7 +108,6 @@ mongoose.connect(mongoose_URL, {dbName: mongoDBName})
               }
             });
           });
-          
     })
 }) 
 .catch(e => console.error('Error to connect 🚨🚨🚨', e))
